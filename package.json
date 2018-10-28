@@ -1,0 +1,9 @@
+{
+  "name": "react-wheel",
+  "version": "1.0.0",
+  "description": "React carousel implemenation",
+  "main": "index.js",
+  "repository": "git@github.com:sreeise/react-wheel.git",
+  "author": "sreeise",
+  "license": "MIT"
+}

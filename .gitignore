@@ -62,3 +62,9 @@ typings/
 
 # Jetbrains
 \.idea/
+
+# Webpack dev build
+dist/
+
+# Webpack production build
+build/

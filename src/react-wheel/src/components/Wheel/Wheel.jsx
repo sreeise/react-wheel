@@ -10,6 +10,8 @@ const Slide = styled.div`
   transition: opacity 2.0s ease-in-out;
 `;
 
+// Main implementation of Carousel where
+// the slides are sorted properly
 class Wheel extends Component {
   constructor(props) {
     super(props);
@@ -28,11 +30,10 @@ class Wheel extends Component {
     };
 
     this.wrapState = this.wrapState.bind(this);
-    this.divideSlides = this.divideSlides.bind(this);
+    this.sortSlides = this.sortSlides.bind(this);
     this.slide = this.slide.bind(this);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
-    this.transition = this.transition.bind(this);
     this.order = this.order.bind(this);
   }
 
@@ -46,7 +47,7 @@ class Wheel extends Component {
 
     let slides = this.wrapState();
     let slidesShowing = this.props.slidesShowing;
-    this.divideSlides(slides, slidesShowing).then((array) => {
+    this.sortSlides(slides, slidesShowing).then((array) => {
       this.setState({
         slides: array,
         slideLength: array.length,
@@ -55,13 +56,17 @@ class Wheel extends Component {
     });
   }
 
-  divideSlides(slides, slidesShowing) {
+  sortSlides(slides, slidesShowing) {
+    // Put each slides elements in its own array
     let elementsArray = [];
     return new Promise((resolve) => {
       while (slides.length > 0) {
         let tempArray = [];
         for (let i = 0; i < slidesShowing; i++) {
           const value = slides.shift();
+          // Prevents undefined values in the array
+          // if the length of the last slide does
+          // not meet the slidesShowing amount
           if (value !== undefined) {
             tempArray.push(value);
           }
@@ -81,20 +86,6 @@ class Wheel extends Component {
     return Children.map(children, (child) => cloneElement(child,
         { slideLength },
       ));
-  }
-
-  transition(index) {
-    const { position } = this.state;
-    const { children } = this.props;
-    const slideLength = children.length;
-
-    if (slideLength === 2) {
-      return index;
-    } else if (index - position < 0) {
-      return slideLength - Math.abs(index - position);
-    } else {
-      return index - position;
-    }
   }
 
   order(index) {
@@ -178,8 +169,11 @@ class Wheel extends Component {
         </WheelContainer>
       );
     } else {
+      /*
+      TODO: Need some type of loading icon here
+       */
       return (
-        <div>REACT</div>
+        <div>Rendering</div>
       );
     }
   }

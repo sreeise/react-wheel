@@ -68,3 +68,15 @@ dist/
 
 # Webpack production build
 build/
+
+# Bit objects
+.bit/
+
+# Project dependencies
+.cache
+yarn-error.log
+src/react-wheel/public/
+
+# Build directory
+/public
+.DS_Store

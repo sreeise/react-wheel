@@ -1,10 +1,11 @@
+import React from "react";
 import MuiThemeProvider from "@material-ui/core/es/styles/MuiThemeProvider";
 import Button from "@material-ui/core/Button/Button";
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import React from "react";
-import darkTheme from "../theme/dark.jsx";
 import * as PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import darkTheme from "../theme/dark";
+import lightTheme from "../theme/light";
 
 const styles = theme => ({
   arrow: {
@@ -15,7 +16,7 @@ const styles = theme => ({
 function LeftArrow(props) {
   const { classes } = props;
   return (
-    <MuiThemeProvider theme={darkTheme}>
+    <MuiThemeProvider theme={props.theme === "dark" ? darkTheme : lightTheme}>
       <Button className={classes.arrow}
         disabled={props.disabled}
         onClick={props.onClick}>

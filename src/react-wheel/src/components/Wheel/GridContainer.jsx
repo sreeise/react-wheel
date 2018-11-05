@@ -27,7 +27,6 @@ const Container = styled.div`
   width: 100%
   max-width: 100%;
   padding: 20px;
-  background-color: #222222;
 `;
 
 
@@ -45,7 +44,7 @@ function GridContainer(props) {
             className={classes.grid}>
 
         <Grid item xs={1} sm={1}>
-          <LeftArrow onClick={props.previous}/>
+          <LeftArrow theme={props.theme} onClick={props.previous}/>
         </Grid>
 
 
@@ -57,7 +56,7 @@ function GridContainer(props) {
 
 
         <Grid item xs={1} sm={1}>
-          <RightArrow onClick={props.next}/>
+          <RightArrow theme={props.theme} onClick={props.next}/>
         </Grid>
       </Grid>
     </Container>

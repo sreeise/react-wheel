@@ -12,6 +12,7 @@ function WheelContainer(props) {
         spacing={props.spacing}
         next={props.next}
         previous={props.previous}
+        theme={props.theme}
       >
         <Wrapper>{props.children}</Wrapper>
       </GridContainer>

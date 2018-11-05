@@ -2,6 +2,8 @@ import React, { Children, cloneElement, Component } from "react";
 import WheelContainer from "./WheelContainer";
 import FlexContainer from "./FlexContainer";
 import styled from "styled-components";
+import lightTheme from "../theme/light";
+import darkTheme from "../theme/dark";
 
 const Slide = styled.div`
   flex: 1 0 100%;
@@ -42,7 +44,7 @@ class Wheel extends Component {
     this.setState({
       arrows: props.arrows === true,
       slidesShowing: props.slidesShowing === undefined ? 1 : props.slidesShowing,
-      space: props.space === undefined ? 8 : props.space,
+      space: props.space === undefined ? 8 : props.space
     });
 
     let slides = this.wrapState();
@@ -90,8 +92,7 @@ class Wheel extends Component {
 
   order(index) {
     const { position } = this.state;
-    const { children } = this.props;
-    const slideLength = children.length;
+    const slideLength = this.state.slides.length;
 
     if (slideLength === 2) {
       return index;
@@ -104,6 +105,9 @@ class Wheel extends Component {
 
   next() {
     if (this.state.currentIndex >= this.state.slides.length - 1) {
+      this.setState({
+        currentIndex: this.state.slides.length - 1
+      });
       return;
     }
     let slides = this.state.slides;
@@ -120,6 +124,9 @@ class Wheel extends Component {
 
   previous() {
     if (this.state.currentIndex <= 0) {
+      this.setState({
+        currentIndex: 0
+      });
       return;
     }
 
@@ -155,7 +162,8 @@ class Wheel extends Component {
       let length = this.state.slides.length;
       return (
         <WheelContainer size={this.props.size} spacing={this.props.spacing}
-                        next={this.next} previous={this.previous}>
+                        next={this.next} previous={this.previous}
+                        theme={this.props.theme}>
           <FlexContainer sliding={this.state.sliding}
                          direction={this.state.direction}
                          slideLength={length}>

@@ -2,8 +2,6 @@ import React, { Children, cloneElement, Component } from "react";
 import WheelContainer from "./WheelContainer";
 import FlexContainer from "./FlexContainer";
 import styled from "styled-components";
-import lightTheme from "../theme/light";
-import darkTheme from "../theme/dark";
 
 const Slide = styled.div`
   flex: 1 0 100%;

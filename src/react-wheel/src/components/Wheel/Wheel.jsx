@@ -1,14 +1,7 @@
 import React, { Children, cloneElement, Component } from "react";
 import WheelContainer from "./WheelContainer";
-import FlexContainer from "./FlexContainer";
-import styled from "styled-components";
-
-const Slide = styled.div`
-  flex: 1 0 100%;
-  flex-basis: 8%;
-  order: ${props => props.order};
-  transition: opacity 2.0s ease-in-out;
-`;
+import Slide from "@material-ui/core/Slide/Slide";
+import slideTransition from "../../css/animation.module.css";
 
 // Main implementation of Carousel where
 // the slides are sorted properly
@@ -21,12 +14,13 @@ class Wheel extends Component {
       slideLength: 0,
       arrows: true,
       slidesShowing: 0,
-      space: 0,
-      called: 0,
+      spacing: 0,
       currentIndex: 0,
-      direction: "",
-      position: 0,
       sliding: false,
+      in: false,
+      slideTo: "left",
+      leaveDuration: 200,
+      enterDuration: 200
     };
 
     this.wrapState = this.wrapState.bind(this);
@@ -34,7 +28,8 @@ class Wheel extends Component {
     this.slide = this.slide.bind(this);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
-    this.order = this.order.bind(this);
+    this.slideBefore = this.slideBefore.bind(this);
+    this.slideAfter = this.slideAfter.bind(this);
   }
 
   componentDidMount() {
@@ -42,7 +37,10 @@ class Wheel extends Component {
     this.setState({
       arrows: props.arrows === true,
       slidesShowing: props.slidesShowing === undefined ? 1 : props.slidesShowing,
-      space: props.space === undefined ? 8 : props.space
+      spacing: props.spacing === undefined ? 8 : props.spacing,
+      in: true,
+      leaveDuration: props.leaveDuration === undefined ? 300 : props.leaveDuration,
+      enterDuration: props.enterDuration === undefined ? 300 : props.enterDuration
     });
 
     let slides = this.wrapState();
@@ -88,19 +86,6 @@ class Wheel extends Component {
       ));
   }
 
-  order(index) {
-    const { position } = this.state;
-    const slideLength = this.state.slides.length;
-
-    if (slideLength === 2) {
-      return index;
-    } else if (index - position < 0) {
-      return slideLength - Math.abs(index - position);
-    } else {
-      return index - position;
-    }
-  }
-
   next() {
     if (this.state.currentIndex >= this.state.slides.length - 1) {
       this.setState({
@@ -108,15 +93,16 @@ class Wheel extends Component {
       });
       return;
     }
-    let slides = this.state.slides;
-    let index = this.state.currentIndex + 1;
-    let last = slides.length - 1;
+
+    const slides = this.state.slides;
+    const index = this.state.currentIndex + 1;
+    const last = slides.length - 1;
 
     switch (index) {
       case last:
-        return this.slide("next", index, slides[last], index);
+        return this.slide(slides[last], index, "left");
       default:
-        return this.slide("next", index, slides[index], index);
+        return this.slide(slides[index], index, "left");
     }
   }
 
@@ -128,50 +114,81 @@ class Wheel extends Component {
       return;
     }
 
-    let slides = this.state.slides;
-    let index = this.state.currentIndex - 1;
+    const slides = this.state.slides;
+    const index = this.state.currentIndex - 1;
 
     switch (index) {
       case 0:
-        return this.slide("prev", 0, slides[0], 0);
+        return this.slide(slides[0], 0, "right");
       default:
-        return this.slide("prev", index, slides[index], index);
+        return this.slide(slides[index], index, "right");
     }
   }
 
-  slide(direction, position, slide, currentIndex) {
-    this.setState({
-      sliding: true,
-      currentIndex,
-      direction,
-      position,
-    });
+  async slide(slide, currentIndex, slideTo) {
+    await this.slideBefore(currentIndex, slideTo);
+    await this.slideAfter(slide);
+  }
 
-    setTimeout(() => {
+  slideBefore(currentIndex, slideTo) {
+    return new Promise((resolve) => {
       this.setState({
-        sliding: false,
-        currentSlide: slide,
+        in: false,
+        sliding: true,
+        currentIndex,
+        slideTo: slideTo,
       });
-    }, 50);
+      resolve();
+    });
+  }
+
+  slideAfter(slide) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.setState({
+          sliding: false,
+          in: true,
+          currentSlide: slide
+        });
+        resolve();
+      }, 200);
+    });
   }
 
   render() {
     if (this.state.currentSlide !== undefined) {
-      let length = this.state.slides.length;
+      const enter = this.state.enterDuration;
+      const leave = this.state.leaveDuration;
+      const slide = this.state.currentSlide;
+      const mounting = this.state.in;
+
       return (
-        <WheelContainer size={this.props.size} spacing={this.props.spacing}
+        <WheelContainer spacing={this.props.spacing}
                         next={this.next} previous={this.previous}
                         theme={this.props.theme}>
-          <FlexContainer sliding={this.state.sliding}
-                         direction={this.state.direction}
-                         slideLength={length}>
-            {this.state.currentSlide.map((item, index) => (
-              <Slide slideLength={length} position={this.state.position}
-                     order={this.order(index)} key={index} index={index}>
-                {item}
-              </Slide>
-            ))}
-          </FlexContainer>
+          <div className={slideTransition.slideFlex}>
+            {slide.map((item, index) => {
+              if (this.state.slideTo === "right") {
+                  return(
+                    <Slide direction={"left"} className={slideTransition.slideOutLeft}
+                           mountOnEnter unmountOnExit in={mounting}
+                           key={index} index={index}
+                           timeout={{enter: enter, exit: leave}}>
+                      {item}
+                    </Slide>
+                  )
+              } else {
+                return(
+                  <Slide direction={"right"} className={slideTransition.slideOutRight}
+                         mountOnEnter unmountOnExit in={mounting}
+                         key={index} index={index}
+                         timeout={{enter: enter, exit: leave}}>
+                    {item}
+                  </Slide>
+                )
+              }
+            })}
+          </div>
         </WheelContainer>
       );
     } else {

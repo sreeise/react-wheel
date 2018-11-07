@@ -4,63 +4,57 @@ import LeftArrow from "../arrows/LeftArrow";
 import RightArrow from "../arrows/RightArrow";
 import * as PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import styled from "styled-components";
 
 const styles = theme => ({
   grid: {
     width: "100%",
     alignItems: "center",
     textAlign: "center",
-    justify: "flex-start",
+    justify: "center",
   },
   container: {
     margin: theme.spacing * 2,
     maxWidth: "100%",
   },
-  slides: {
-    maxWidth: "100%",
-    display: "block",
-  },
 });
 
-const Container = styled.div`
-  width: 100%
-  max-width: 100%;
-  padding: 20px;
-`;
-
-
-function GridContainer(props) {
-  const { classes } = props;
-
-  if (props.size < 0 || props.size > 10) {
-    throw new Error("size prop must be 0 - 10");
+class GridContainer extends React.Component {
+  constructor(props) {
+    super(props);
   }
 
-  return (
-    <Container>
-      <Grid container spacing={props.spacing}
-            direction={"row"}
-            className={classes.grid}>
+  componentDidCatch(error, errorInfo) {
+    console.error(`GridContainer Error: ${error}`);
+    console.info(`GridContainer Error Info: ${errorInfo}`);
+  }
 
-        <Grid item xs={1} sm={1}>
-          <LeftArrow theme={props.theme} onClick={props.previous}/>
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <div className={classes.container}>
+        <Grid container
+              spacing={this.props.spacing}
+              direction={"row"}
+              className={classes.grid}>
+
+          <Grid item xs={1} sm={1}>
+            <LeftArrow theme={this.props.theme} onClick={this.props.previous}/>
+          </Grid>
+
+          <Grid item sm xs>
+            <div className={classes.grid}>
+              {this.props.children}
+            </div>
+          </Grid>
+
+          <Grid item xs={1} sm={1}>
+            <RightArrow theme={this.props.theme} onClick={this.props.next}/>
+          </Grid>
         </Grid>
-
-
-        <Grid item sm xs>
-          <div className={classes.slides}>
-            {props.children}
-          </div>
-        </Grid>
-
-
-        <Grid item xs={1} sm={1}>
-          <RightArrow theme={props.theme} onClick={props.next}/>
-        </Grid>
-      </Grid>
-    </Container>
-  );
+      </div>
+    );
+  }
 }
 
 GridContainer.propTypes = {

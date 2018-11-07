@@ -2,22 +2,14 @@ import React from "react";
 import MuiThemeProvider from "@material-ui/core/es/styles/MuiThemeProvider";
 import Button from "@material-ui/core/Button/Button";
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import * as PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import darkTheme from "../theme/dark";
 import lightTheme from "../theme/light";
-
-const styles = theme => ({
-  arrow: {
-    maxWidth: "100%"
-  }
-});
+import arrowCSS from "../../css/arrows.module.css";
 
 function LeftArrow(props) {
-  const { classes } = props;
   return (
     <MuiThemeProvider theme={props.theme === "dark" ? darkTheme : lightTheme}>
-      <Button className={classes.arrow}
+      <Button className={arrowCSS.arrow}
         disabled={props.disabled}
         onClick={props.onClick}>
         <ChevronLeft/>
@@ -26,8 +18,4 @@ function LeftArrow(props) {
   );
 }
 
-LeftArrow.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(LeftArrow);
+export default LeftArrow;

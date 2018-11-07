@@ -80,10 +80,7 @@ class Wheel extends Component {
 
   wrapState() {
     const { children } = this.props;
-    const slideLength = this.props.slidesShowing;
-    return Children.map(children, (child) => cloneElement(child,
-        { slideLength },
-      ));
+    return Children.map(children, (child) => cloneElement(child));
   }
 
   next() {

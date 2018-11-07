@@ -4,7 +4,7 @@ import React from "react";
 const Mapper = (props) => {
   const { children } = props;
   return (
-    <div style={{ "alignItems": "center", "max-width": "100%" }}>
+    <div style={{ "alignItems": "center", "maxWidth": "100%" }}>
       {React.Children.map(children, (child, index) => {
         if (child !== null) {
           return (

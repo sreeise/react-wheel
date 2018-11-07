@@ -9,7 +9,7 @@ import arrowCSS from "../../css/arrows.module.css";
 function LeftArrow(props) {
   return (
     <MuiThemeProvider theme={props.theme === "dark" ? darkTheme : lightTheme}>
-      <Button className={arrowCSS.arrow}
+      <Button className={props.arrows === false ? arrowCSS.arrowDisabled : arrowCSS.arrow}
         disabled={props.disabled}
         onClick={props.onClick}>
         <ChevronLeft/>

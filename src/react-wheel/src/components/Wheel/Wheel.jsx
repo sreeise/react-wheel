@@ -35,7 +35,7 @@ class Wheel extends Component {
   componentDidMount() {
     const props = Object.assign({}, this.props);
     this.setState({
-      arrows: props.arrows === true,
+      arrows: props.arrows,
       slidesShowing: props.slidesShowing === undefined ? 1 : props.slidesShowing,
       spacing: props.spacing === undefined ? 8 : props.spacing,
       in: true,
@@ -162,6 +162,7 @@ class Wheel extends Component {
       return (
         <WheelContainer spacing={this.props.spacing}
                         next={this.next} previous={this.previous}
+                        arrows={this.state.arrows}
                         theme={this.props.theme}>
           <div className={slideTransition.slideFlex}>
             {slide.map((item, index) => {

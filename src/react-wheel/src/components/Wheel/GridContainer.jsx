@@ -39,7 +39,7 @@ class GridContainer extends React.Component {
               className={classes.grid}>
 
           <Grid item xs={1} sm={1}>
-            <LeftArrow theme={this.props.theme} onClick={this.props.previous}/>
+            <LeftArrow arrows={this.props.arrows} theme={this.props.theme} onClick={this.props.previous}/>
           </Grid>
 
           <Grid item sm xs>
@@ -49,7 +49,7 @@ class GridContainer extends React.Component {
           </Grid>
 
           <Grid item xs={1} sm={1}>
-            <RightArrow theme={this.props.theme} onClick={this.props.next}/>
+            <RightArrow arrows={this.props.arrows} theme={this.props.theme} onClick={this.props.next}/>
           </Grid>
         </Grid>
       </div>

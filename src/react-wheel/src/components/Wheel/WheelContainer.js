@@ -14,6 +14,7 @@ function WheelContainer(props) {
         previous={props.previous}
         theme={props.theme}
         in={props.in}
+        arrows={props.arrows}
       >
         <Wrapper>{props.children}</Wrapper>
       </GridContainer>

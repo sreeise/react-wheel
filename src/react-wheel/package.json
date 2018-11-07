@@ -16,10 +16,7 @@
     "gatsby-source-filesystem": "^2.0.4",
     "gatsby-transformer-sharp": "^2.1.4",
     "lodash": "^4.17.11",
-<<<<<<< HEAD
-=======
     "node-sass": "^4.10.0",
->>>>>>> Added slide transitions that work with mounting and unmounting
     "prop-types": "^15.6.2",
     "react": "^16.5.1",
     "react-dnd": "^5.0.0",

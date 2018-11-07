@@ -8,7 +8,6 @@ function WheelContainer(props) {
   return (
     <Mapper>
       <GridContainer
-        size={props.size}
         spacing={props.spacing}
         next={props.next}
         previous={props.previous}

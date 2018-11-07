@@ -34,7 +34,7 @@ const urls = [
 const IndexPage = () => (
   <div>
     <ContainerDark>
-      <Wheel theme={"dark"} size={10} slidesShowing={4} spacing={40}>
+      <Wheel theme={"dark"} slidesShowing={4} spacing={40}>
         {urls.map((url, index) => {
           return (
             <a key={index} href={url}>
@@ -49,7 +49,7 @@ const IndexPage = () => (
       </Wheel>
     </ContainerDark>
     <ContainerLight>
-      <Wheel theme={"light"} size={6} slidesShowing={2} spacing={0}>
+      <Wheel theme={"light"} slidesShowing={2} spacing={0}>
         {urls.map((url, index) => {
           return (
             <a key={index} href={url}>

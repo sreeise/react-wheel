@@ -19,8 +19,8 @@ class Wheel extends Component {
       sliding: false,
       in: false,
       slideTo: "left",
-      leaveDuration: 200,
-      enterDuration: 200,
+      leaveDuration: 300,
+      enterDuration: 300,
     };
 
     this.wrapState = this.wrapState.bind(this);
@@ -28,7 +28,6 @@ class Wheel extends Component {
     this.slide = this.slide.bind(this);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
-    this.slideBefore = this.slideBefore.bind(this);
   }
 
   componentDidMount() {
@@ -94,11 +93,19 @@ class Wheel extends Component {
     const index = this.state.currentIndex + 1;
     const last = slides.length - 1;
 
+    this.setState({
+      in: false,
+      sliding: true,
+      currentIndex: index,
+      slideTo: "left",
+    });
+
     switch (index) {
       case last:
-        return this.slide(slides[last], index, "left");
+        this.slide(slides[last], "left");
+        break;
       default:
-        return this.slide(slides[index], index, "left");
+        this.slide(slides[index], "left");
     }
   }
 
@@ -113,32 +120,31 @@ class Wheel extends Component {
     const slides = this.state.slides;
     const index = this.state.currentIndex - 1;
 
+    this.setState({
+      in: false,
+      sliding: true,
+      currentIndex: index,
+      slideTo: "right",
+    });
+
     switch (index) {
       case 0:
-        return this.slide(slides[0], 0, "right");
+        this.slide(slides[0], "right");
+        break;
       default:
-        return this.slide(slides[index], index, "right");
+        this.slide(slides[index], "right");
     }
   }
 
-  async slide(slide, currentIndex, slideTo) {
-    await this.slideBefore(currentIndex, slideTo);
+  slide(slide, slideTo) {
     setTimeout(() => {
       this.setState({
         sliding: false,
         in: true,
+        slideTo,
         currentSlide: slide,
       });
     }, 80);
-  }
-
-  slideBefore(currentIndex, slideTo) {
-    this.setState({
-      in: false,
-      sliding: true,
-      currentIndex,
-      slideTo: slideTo,
-    });
   }
 
   render() {

@@ -20,7 +20,7 @@ class Wheel extends Component {
       in: false,
       slideTo: "left",
       leaveDuration: 200,
-      enterDuration: 200
+      enterDuration: 200,
     };
 
     this.wrapState = this.wrapState.bind(this);
@@ -29,7 +29,6 @@ class Wheel extends Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.slideBefore = this.slideBefore.bind(this);
-    this.slideAfter = this.slideAfter.bind(this);
   }
 
   componentDidMount() {
@@ -40,7 +39,7 @@ class Wheel extends Component {
       spacing: props.spacing === undefined ? 8 : props.spacing,
       in: true,
       leaveDuration: props.leaveDuration === undefined ? 300 : props.leaveDuration,
-      enterDuration: props.enterDuration === undefined ? 300 : props.enterDuration
+      enterDuration: props.enterDuration === undefined ? 300 : props.enterDuration,
     });
 
     let slides = this.wrapState();
@@ -86,7 +85,7 @@ class Wheel extends Component {
   next() {
     if (this.state.currentIndex >= this.state.slides.length - 1) {
       this.setState({
-        currentIndex: this.state.slides.length - 1
+        currentIndex: this.state.slides.length - 1,
       });
       return;
     }
@@ -106,7 +105,7 @@ class Wheel extends Component {
   previous() {
     if (this.state.currentIndex <= 0) {
       this.setState({
-        currentIndex: 0
+        currentIndex: 0,
       });
       return;
     }
@@ -124,31 +123,21 @@ class Wheel extends Component {
 
   async slide(slide, currentIndex, slideTo) {
     await this.slideBefore(currentIndex, slideTo);
-    await this.slideAfter(slide);
+    setTimeout(() => {
+      this.setState({
+        sliding: false,
+        in: true,
+        currentSlide: slide,
+      });
+    }, 80);
   }
 
   slideBefore(currentIndex, slideTo) {
-    return new Promise((resolve) => {
-      this.setState({
-        in: false,
-        sliding: true,
-        currentIndex,
-        slideTo: slideTo,
-      });
-      resolve();
-    });
-  }
-
-  slideAfter(slide) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        this.setState({
-          sliding: false,
-          in: true,
-          currentSlide: slide
-        });
-        resolve();
-      }, 200);
+    this.setState({
+      in: false,
+      sliding: true,
+      currentIndex,
+      slideTo: slideTo,
     });
   }
 
@@ -158,34 +147,29 @@ class Wheel extends Component {
       const leave = this.state.leaveDuration;
       const slide = this.state.currentSlide;
       const mounting = this.state.in;
+      let currentClass = this.state.slideTo === "right" ?
+        slideTransition.slideOutLeft : slideTransition.slideOutRight;
+      let direction = this.state.slideTo === "right" ? "left" : "right";
 
       return (
         <WheelContainer spacing={this.props.spacing}
-                        next={this.next} previous={this.previous}
+                        next={this.next}
+                        previous={this.previous}
                         arrows={this.state.arrows}
                         theme={this.props.theme}>
           <div className={slideTransition.slideFlex}>
-            {slide.map((item, index) => {
-              if (this.state.slideTo === "right") {
-                  return(
-                    <Slide direction={"left"} className={slideTransition.slideOutLeft}
-                           mountOnEnter unmountOnExit in={mounting}
-                           key={index} index={index}
-                           timeout={{enter: enter, exit: leave}}>
-                      {item}
-                    </Slide>
-                  )
-              } else {
-                return(
-                  <Slide direction={"right"} className={slideTransition.slideOutRight}
-                         mountOnEnter unmountOnExit in={mounting}
-                         key={index} index={index}
-                         timeout={{enter: enter, exit: leave}}>
-                    {item}
-                  </Slide>
-                )
-              }
-            })}
+            {slide.map((item, index) => (
+              <Slide direction={direction}
+                     className={currentClass}
+                     mountOnEnter
+                     unmountOnExit
+                     in={mounting}
+                     key={index}
+                     index={index}
+                     timeout={{ enter: enter, exit: leave }}>
+                {item}
+              </Slide>
+            ))}
           </div>
         </WheelContainer>
       );

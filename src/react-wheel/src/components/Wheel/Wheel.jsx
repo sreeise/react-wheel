@@ -1,5 +1,5 @@
 import React, { Children, cloneElement, Component } from "react";
-import WheelContainer from "./WheelContainer";
+import GridContainer from "./GridContainer";
 import Slide from "@material-ui/core/Slide/Slide";
 import slideTransition from "../../css/animation.module.css";
 
@@ -158,7 +158,7 @@ class Wheel extends Component {
       let direction = this.state.slideTo === "right" ? "left" : "right";
 
       return (
-        <WheelContainer spacing={this.props.spacing}
+        <GridContainer spacing={this.props.spacing}
                         next={this.next}
                         previous={this.previous}
                         arrows={this.state.arrows}
@@ -177,7 +177,7 @@ class Wheel extends Component {
               </Slide>
             ))}
           </div>
-        </WheelContainer>
+        </GridContainer>
       );
     } else {
       /*

@@ -4,6 +4,7 @@ import LeftArrow from "../arrows/LeftArrow";
 import RightArrow from "../arrows/RightArrow";
 import * as PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import Mapper from "./Mapper";
 
 const styles = theme => ({
   grid: {
@@ -43,9 +44,9 @@ class GridContainer extends React.Component {
           </Grid>
 
           <Grid item sm xs>
-            <div className={classes.grid}>
+            <Mapper className={classes.grid}>
               {this.props.children}
-            </div>
+            </Mapper>
           </Grid>
 
           <Grid item xs={1} sm={1}>

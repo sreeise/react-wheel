@@ -1,5 +1,4 @@
 import GridContainer from "./GridContainer";
-import Wrapper from "./wrapper";
 import React from "react";
 import Mapper from "./Mapper";
 
@@ -15,7 +14,7 @@ function WheelContainer(props) {
         in={props.in}
         arrows={props.arrows}
       >
-        <Wrapper>{props.children}</Wrapper>
+        {props.children}
       </GridContainer>
     </Mapper>
   );

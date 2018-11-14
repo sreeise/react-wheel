@@ -179,13 +179,6 @@ class Wheel extends Component {
           </div>
         </GridContainer>
       );
-    } else {
-      /*
-      TODO: Need some type of loading icon here
-       */
-      return (
-        <div>Rendering</div>
-      );
     }
   }
 }

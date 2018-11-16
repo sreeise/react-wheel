@@ -1,12 +1,10 @@
 .slideOutLeft {
-  transform: translateX(-2000px);
   flex: 1 0 100%;
   flex-basis: 10%;
   max-width: 100%;
 }
 
 .slideOutRight {
-  transform: translateX(2000px);
   flex: 1 0 100%;
   flex-basis: 10%;
   max-width: 100%;

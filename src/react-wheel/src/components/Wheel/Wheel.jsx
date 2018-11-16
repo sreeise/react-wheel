@@ -43,13 +43,7 @@ class Wheel extends Component {
 
     let slides = this.wrapState();
     let slidesShowing = this.props.slidesShowing;
-    this.sortSlides(slides, slidesShowing).then((array) => {
-      this.setState({
-        slides: array,
-        slideLength: array.length,
-        currentSlide: array[0],
-      });
-    });
+    return this.sortSlides(slides, slidesShowing);
   }
 
   sortSlides(slides, slidesShowing) {
@@ -72,7 +66,12 @@ class Wheel extends Component {
         tempArray = [];
         tempArray.length = 0;
       }
-      resolve(elementsArray);
+
+      this.setState({
+        slides: elementsArray,
+        slideLength: elementsArray.length,
+        currentSlide: elementsArray[0],
+      });
     });
   }
 
@@ -82,10 +81,16 @@ class Wheel extends Component {
   }
 
   next() {
+    this.setState({
+      slideTo: "right"
+    });
+
     if (this.state.currentIndex >= this.state.slides.length - 1) {
-      this.setState({
-        currentIndex: this.state.slides.length - 1,
-      });
+      if (this.state.currentIndex !== this.state.slides.length -1) {
+        this.setState({
+          currentIndex: this.state.slides.length - 1,
+        });
+      }
       return;
     }
 
@@ -97,7 +102,6 @@ class Wheel extends Component {
       in: false,
       sliding: true,
       currentIndex: index,
-      slideTo: "left",
     });
 
     switch (index) {
@@ -110,10 +114,16 @@ class Wheel extends Component {
   }
 
   previous() {
+    this.setState({
+      slideTo: "left"
+    });
+
     if (this.state.currentIndex <= 0) {
-      this.setState({
-        currentIndex: 0,
-      });
+      if (this.state.currentIndex !== 0) {
+        this.setState({
+          currentIndex: 0,
+        });
+      }
       return;
     }
 
@@ -124,7 +134,6 @@ class Wheel extends Component {
       in: false,
       sliding: true,
       currentIndex: index,
-      slideTo: "right",
     });
 
     switch (index) {
@@ -136,13 +145,13 @@ class Wheel extends Component {
     }
   }
 
-  slide(slide, slideTo) {
+  slide(currentSlide, slideTo) {
     setTimeout(() => {
       this.setState({
         sliding: false,
         in: true,
         slideTo,
-        currentSlide: slide,
+        currentSlide
       });
     }, 80);
   }

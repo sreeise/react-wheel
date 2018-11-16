@@ -1,21 +1,23 @@
 import React, { Children, cloneElement, Component } from "react";
 import GridContainer from "./GridContainer";
-import Slide from "@material-ui/core/Slide/Slide";
-import slideTransition from "../../css/animation.module.css";
 import * as PropTypes from "prop-types";
 import WheelUtils from "./utils/WheelUtils";
+import SlideContainer from "./Slide";
+import { withStyles } from "@material-ui/core/styles";
+import styles from "./styles";
 
 // Main implementation of Carousel where
 // the slides are sorted properly
 class Wheel extends Component {
   constructor(props) {
     super(props);
-    let slideMap = new Map();
+    this.slideMap = new Map();
     this.state = {
       slides: [],
       currentSlide: [],
+      currentClass: "",
       slideLength: 0,
-      slideMap: slideMap,
+      slideMap: this.slideMap,
       arrows: true,
       slidesShowing: 0,
       spacing: 0,
@@ -45,7 +47,8 @@ class Wheel extends Component {
       in: true,
       leaveDuration: props.leaveDuration === undefined ? 300 : props.leaveDuration,
       enterDuration: props.enterDuration === undefined ? 300 : props.enterDuration,
-      startSlide: props.startSlide === undefined ? 0 : props.startSlide
+      startSlide: props.startSlide === undefined ? 0 : props.startSlide,
+      currentClass: props.classes.slide
     });
 
     let slides = this.wrapState();
@@ -60,7 +63,7 @@ class Wheel extends Component {
       WheelUtils.sortSlides(slides, slideMap, slidesShowing);
 
       let start = this.props.startSlide;
-      if (start === undefined || start > slideMap.size -1) {
+      if (start === undefined || start > slideMap.size - 1) {
         start = 0;
       }
 
@@ -141,7 +144,7 @@ class Wheel extends Component {
 
   goTo(index) {
     if (this.state.currentIndex <= index) {
-      this.slide(this.state.slideMap.get(index), "left")
+      this.slide(this.state.slideMap.get(index), "left");
     } else {
       this.slide(this.state.slideMap.get(index), "right");
     }
@@ -153,19 +156,20 @@ class Wheel extends Component {
         sliding: false,
         in: true,
         slideTo,
-        currentSlide,
+        currentSlide
       });
     }, 90);
   }
 
   render() {
     if (this.state.currentSlide !== undefined) {
+      const { classes } = this.props;
       const enter = this.state.enterDuration;
       const leave = this.state.leaveDuration;
       const slide = this.state.currentSlide;
       const mounting = this.state.in;
-      const currentClass = slideTransition.slide;
       let direction = this.state.slideTo === "right" ? "left" : "right";
+      const currentClass = this.state.currentClass;
 
       return (
         <GridContainer spacing={this.props.spacing}
@@ -176,19 +180,12 @@ class Wheel extends Component {
                        arrows={this.state.arrows}
                        arrowColor={this.props.arrowColor}
                        theme={this.props.theme}>
-          <div className={slideTransition.slideFlex}>
-            {slide.map((item, index) => (
-              <Slide direction={direction}
-                     className={currentClass}
-                     mountOnEnter
-                     unmountOnExit
-                     in={mounting}
-                     key={index}
-                     index={index}
-                     timeout={{ enter: enter, exit: leave }}>
-                {item}
-              </Slide>
-            ))}
+          <div className={classes.slideFlex}>
+            <SlideContainer slide={slide}
+                            in={mounting}
+                            className={currentClass}
+                            timeout={{ enter: enter, exit: leave }}
+                            direction={direction}/>
           </div>
         </GridContainer>
       );
@@ -196,8 +193,8 @@ class Wheel extends Component {
   }
 }
 
-
 Wheel.propTypes = {
+  classes: PropTypes.object.isRequired,
   arrowColor: PropTypes.string,
   arrows: PropTypes.bool,
   theme: PropTypes.string,
@@ -209,4 +206,4 @@ Wheel.propTypes = {
   startSlide: PropTypes.number,
 };
 
-export default Wheel;
+export default withStyles(styles)(Wheel);

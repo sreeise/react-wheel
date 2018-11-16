@@ -10,11 +10,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: 'gatsby-starter-default',
+        name: 'react-wheel',
         short_name: 'starter',
         start_url: '/',
-        background_color: '#222222',
-        theme_color: '#222222',
         display: 'minimal-ui',
       },
     },

@@ -2,23 +2,28 @@ import React, { Children, cloneElement, Component } from "react";
 import GridContainer from "./GridContainer";
 import Slide from "@material-ui/core/Slide/Slide";
 import slideTransition from "../../css/animation.module.css";
+import * as PropTypes from "prop-types";
+import WheelUtils from "./utils/WheelUtils";
 
 // Main implementation of Carousel where
 // the slides are sorted properly
 class Wheel extends Component {
   constructor(props) {
     super(props);
+    let slideMap = new Map();
     this.state = {
       slides: [],
       currentSlide: [],
       slideLength: 0,
+      slideMap: slideMap,
       arrows: true,
       slidesShowing: 0,
       spacing: 0,
       currentIndex: 0,
       sliding: false,
       in: false,
-      slideTo: "left",
+      slideTo: "right",
+      startSlide: 0,
       leaveDuration: 300,
       enterDuration: 300,
     };
@@ -28,6 +33,7 @@ class Wheel extends Component {
     this.slide = this.slide.bind(this);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
+    this.goTo = this.goTo.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +45,7 @@ class Wheel extends Component {
       in: true,
       leaveDuration: props.leaveDuration === undefined ? 300 : props.leaveDuration,
       enterDuration: props.enterDuration === undefined ? 300 : props.enterDuration,
+      startSlide: props.startSlide === undefined ? 0 : props.startSlide
     });
 
     let slides = this.wrapState();
@@ -48,30 +55,23 @@ class Wheel extends Component {
 
   sortSlides(slides, slidesShowing) {
     // Put each slides elements in its own array
-    let elementsArray = [];
+    let slideMap = this.state.slideMap;
     return new Promise((resolve) => {
-      while (slides.length > 0) {
-        let tempArray = [];
-        for (let i = 0; i < slidesShowing; i++) {
-          const value = slides.shift();
-          // Prevents undefined values in the array
-          // if the length of the last slide does
-          // not meet the slidesShowing amount
-          if (value !== undefined) {
-            tempArray.push(value);
-          }
-        }
+      WheelUtils.sortSlides(slides, slideMap, slidesShowing);
 
-        elementsArray.push(tempArray);
-        tempArray = [];
-        tempArray.length = 0;
+      let start = this.props.startSlide;
+      if (start === undefined || start > slideMap.size -1) {
+        start = 0;
       }
 
       this.setState({
-        slides: elementsArray,
-        slideLength: elementsArray.length,
-        currentSlide: elementsArray[0],
+        slideLength: slideMap.size,
+        currentSlide: slideMap.get(start),
+        startSlide: start,
+        currentIndex: start,
+        slideMap,
       });
+      resolve();
     });
   }
 
@@ -81,12 +81,8 @@ class Wheel extends Component {
   }
 
   next() {
-    this.setState({
-      slideTo: "right"
-    });
-
-    if (this.state.currentIndex >= this.state.slides.length - 1) {
-      if (this.state.currentIndex !== this.state.slides.length -1) {
+    if (this.state.currentIndex >= this.state.slideMap.size - 1) {
+      if (this.state.currentIndex !== this.state.slideMap.size - 1) {
         this.setState({
           currentIndex: this.state.slides.length - 1,
         });
@@ -94,30 +90,27 @@ class Wheel extends Component {
       return;
     }
 
-    const slides = this.state.slides;
+    const slideMap = this.state.slideMap;
     const index = this.state.currentIndex + 1;
-    const last = slides.length - 1;
+    const last = slideMap.size - 1;
 
     this.setState({
       in: false,
       sliding: true,
       currentIndex: index,
+      slideTo: "left",
     });
 
     switch (index) {
       case last:
-        this.slide(slides[last], "left");
+        this.slide(slideMap.get(last), "right");
         break;
       default:
-        this.slide(slides[index], "left");
+        this.slide(slideMap.get(index), "right");
     }
   }
 
   previous() {
-    this.setState({
-      slideTo: "left"
-    });
-
     if (this.state.currentIndex <= 0) {
       if (this.state.currentIndex !== 0) {
         this.setState({
@@ -127,21 +120,30 @@ class Wheel extends Component {
       return;
     }
 
-    const slides = this.state.slides;
+    const slideMap = this.state.slideMap;
     const index = this.state.currentIndex - 1;
 
     this.setState({
       in: false,
       sliding: true,
       currentIndex: index,
+      slideTo: "right",
     });
 
     switch (index) {
       case 0:
-        this.slide(slides[0], "right");
+        this.slide(slideMap.get(0), "left");
         break;
       default:
-        this.slide(slides[index], "right");
+        this.slide(slideMap.get(index), "left");
+    }
+  }
+
+  goTo(index) {
+    if (this.state.currentIndex <= index) {
+      this.slide(this.state.slideMap.get(index), "left")
+    } else {
+      this.slide(this.state.slideMap.get(index), "right");
     }
   }
 
@@ -151,9 +153,9 @@ class Wheel extends Component {
         sliding: false,
         in: true,
         slideTo,
-        currentSlide
+        currentSlide,
       });
-    }, 80);
+    }, 90);
   }
 
   render() {
@@ -162,16 +164,18 @@ class Wheel extends Component {
       const leave = this.state.leaveDuration;
       const slide = this.state.currentSlide;
       const mounting = this.state.in;
-      let currentClass = this.state.slideTo === "right" ?
-        slideTransition.slideOutLeft : slideTransition.slideOutRight;
+      const currentClass = slideTransition.slide;
       let direction = this.state.slideTo === "right" ? "left" : "right";
 
       return (
         <GridContainer spacing={this.props.spacing}
-                        next={this.next}
-                        previous={this.previous}
-                        arrows={this.state.arrows}
-                        theme={this.props.theme}>
+                       next={this.next}
+                       previous={this.previous}
+                       hoverArrowRight={this.props.hoverArrowRight}
+                       hoverArrowLeft={this.props.hoverArrowLeft}
+                       arrows={this.state.arrows}
+                       arrowColor={this.props.arrowColor}
+                       theme={this.props.theme}>
           <div className={slideTransition.slideFlex}>
             {slide.map((item, index) => (
               <Slide direction={direction}
@@ -191,5 +195,18 @@ class Wheel extends Component {
     }
   }
 }
+
+
+Wheel.propTypes = {
+  arrowColor: PropTypes.string,
+  arrows: PropTypes.bool,
+  theme: PropTypes.string,
+  hoverArrowLeft: PropTypes.func,
+  hoverArrowRight: PropTypes.func,
+  spacing: PropTypes.number,
+  leaveDuration: PropTypes.number,
+  enterDuration: PropTypes.number,
+  startSlide: PropTypes.number,
+};
 
 export default Wheel;

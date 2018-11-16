@@ -37,8 +37,18 @@ Then go to:
     // dark or light - changes arrows color based on theme
     theme={"light"} 
     
+    // Arrow click color. One of blue, red, purple, orange, yellow, or amber
+    arrowColor={"purple"}  
+    
     // Amount of children to show in each slide
     slidesShowing={2}
     
+    // Duration of slide leaving and entering in milliseconds
+    enterDuration={800} 
+    leaveDuration={400}
+    
     // one of 0, 8, 24, 40 - changes spacing between carousel and arrows  
     spacing={0}
+    
+    // Slide to start out at - defaults to 0
+    startSlide={1}

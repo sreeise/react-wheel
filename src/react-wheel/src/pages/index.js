@@ -50,7 +50,7 @@ const IndexPage = () => (
     </ContainerDark>
 
     <ContainerLight>
-      <Wheel theme={"light"} slidesShowing={2} spacing={0}>
+      <Wheel theme={"light"} arrowColor={"purple"} startSlide={1} slidesShowing={2} spacing={0}>
         {urls.map((url, index) => {
           return (
             <a key={index} href={url}>
@@ -66,7 +66,7 @@ const IndexPage = () => (
     </ContainerLight>
 
     <ContainerDark>
-      <Wheel theme={"dark"} slidesShowing={4} spacing={40} enterDuration={800} leaveDuration={400}>
+      <Wheel theme={"dark"} slidesShowing={3} spacing={40} enterDuration={800} leaveDuration={400}>
         {urls.map((url, index) => {
           return (
             <a key={index} href={url}>

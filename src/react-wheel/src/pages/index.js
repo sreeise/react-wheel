@@ -14,7 +14,7 @@ const ContainerDark = styled.div`
 
 const ContainerLight = styled.div`
   max-width: 60%;
-  margin-top: 10%;
+  margin-top: 5%;
   margin-left: 20%;
 `;
 
@@ -48,6 +48,7 @@ const IndexPage = () => (
         })}
       </Wheel>
     </ContainerDark>
+
     <ContainerLight>
       <Wheel theme={"light"} slidesShowing={2} spacing={0}>
         {urls.map((url, index) => {
@@ -63,6 +64,22 @@ const IndexPage = () => (
         })}
       </Wheel>
     </ContainerLight>
+
+    <ContainerDark>
+      <Wheel theme={"dark"} slidesShowing={4} spacing={40} enterDuration={800} leaveDuration={400}>
+        {urls.map((url, index) => {
+          return (
+            <a key={index} href={url}>
+              <img
+                style={{ width: "140px" }}
+                alt={url}
+                src={`https://logo.clearbit.com/${url}?size=150`}
+              />
+            </a>
+          );
+        })}
+      </Wheel>
+    </ContainerDark>
   </div>
 );
 

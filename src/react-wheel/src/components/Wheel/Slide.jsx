@@ -1,7 +1,7 @@
 import React from "react";
 import Slide from "@material-ui/core/Slide/Slide";
 
-function SlideContainer(props) {
+const SlideContainer = React.memo(function Container(props) {
   const slide = props.slide;
 
   if (slide === undefined) {
@@ -26,6 +26,6 @@ function SlideContainer(props) {
       ))}
     </React.Fragment>
   )
-}
+})
 
 export default SlideContainer;

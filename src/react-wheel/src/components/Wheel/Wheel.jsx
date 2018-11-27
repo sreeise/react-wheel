@@ -20,7 +20,6 @@ class Wheel extends Component {
       slideTo: "right",
       in: false,
       arrows: true,
-      sliding: false,
       infinite: false,
       spacing: 0,
       startSlide: 0,
@@ -110,7 +109,6 @@ class Wheel extends Component {
   setSliding(currentIndex, slideTo) {
     this.setState({
       in: false,
-      sliding: true,
       currentIndex,
       slideTo
     })
@@ -180,7 +178,6 @@ class Wheel extends Component {
   slide(currentSlide, slideTo) {
     setTimeout(() => {
       this.setState({
-        sliding: false,
         in: true,
         slideTo,
         currentSlide

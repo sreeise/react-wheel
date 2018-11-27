@@ -15,18 +15,18 @@ class Wheel extends Component {
     this.state = {
       slides: [],
       currentSlide: [],
-      currentClass: "",
-      slideLength: 0,
       slideMap: this.slideMap,
-      infinite: false,
-      arrows: true,
-      slidesShowing: 0,
-      spacing: 0,
-      currentIndex: 0,
-      sliding: false,
-      in: false,
+      currentClass: "",
       slideTo: "right",
+      in: false,
+      arrows: true,
+      sliding: false,
+      infinite: false,
+      spacing: 0,
       startSlide: 0,
+      slideLength: 0,
+      currentIndex: 0,
+      slidesShowing: 0,
       leaveDuration: 300,
       enterDuration: 300,
     };
@@ -44,15 +44,15 @@ class Wheel extends Component {
   componentDidMount() {
     const props = Object.assign({}, this.props);
     this.setState({
-      arrows: props.arrows,
-      slidesShowing: props.slidesShowing === undefined ? 1 : props.slidesShowing,
-      spacing: props.spacing === undefined ? 8 : props.spacing,
       in: true,
-      leaveDuration: props.leaveDuration === undefined ? 300 : props.leaveDuration,
-      enterDuration: props.enterDuration === undefined ? 300 : props.enterDuration,
-      startSlide: props.startSlide === undefined ? 0 : props.startSlide,
+      arrows: props.arrows,
       currentClass: props.classes.slide,
-      infinite: props.infinite === true
+      infinite: props.infinite === true,
+      spacing: props.spacing === undefined ? 8 : props.spacing,
+      startSlide: props.startSlide === undefined ? 0 : props.startSlide,
+      slidesShowing: props.slidesShowing === undefined ? 1 : props.slidesShowing,
+      leaveDuration: props.leaveDuration === undefined ? 300 : props.leaveDuration,
+      enterDuration: props.enterDuration === undefined ? 300 : props.enterDuration
     });
 
     let slides = this.wrapState();
@@ -195,7 +195,7 @@ class Wheel extends Component {
       const leave = this.state.leaveDuration;
       const slide = this.state.currentSlide;
       const mounting = this.state.in;
-      let direction = this.state.slideTo === "right" ? "left" : "right";
+      const direction = this.state.slideTo === "right" ? "left" : "right";
       const currentClass = this.state.currentClass;
 
       return (

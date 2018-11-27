@@ -18,6 +18,7 @@ class Wheel extends Component {
       currentClass: "",
       slideLength: 0,
       slideMap: this.slideMap,
+      infinite: false,
       arrows: true,
       slidesShowing: 0,
       spacing: 0,
@@ -36,6 +37,8 @@ class Wheel extends Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.goTo = this.goTo.bind(this);
+    this.isInfinite = this.isInfinite.bind(this);
+    this.setSliding = this.setSliding.bind(this);
   }
 
   componentDidMount() {
@@ -48,7 +51,8 @@ class Wheel extends Component {
       leaveDuration: props.leaveDuration === undefined ? 300 : props.leaveDuration,
       enterDuration: props.enterDuration === undefined ? 300 : props.enterDuration,
       startSlide: props.startSlide === undefined ? 0 : props.startSlide,
-      currentClass: props.classes.slide
+      currentClass: props.classes.slide,
+      infinite: props.infinite === true
     });
 
     let slides = this.wrapState();
@@ -83,8 +87,40 @@ class Wheel extends Component {
     return Children.map(children, (child) => cloneElement(child));
   }
 
+  isInfinite(slideTo) {
+    if (this.state.infinite) {
+      const slideMap = this.state.slideMap;
+
+      if (slideTo === "left") {
+        this.setSliding(0, "left");
+        this.slide(slideMap.get(0), "right");
+        return true;
+
+      } else if (slideTo === "right") {
+        const index = this.state.slideMap.size - 1;
+        this.setSliding(index, "right");
+        this.slide(slideMap.get(index), "left");
+        return true;
+
+      }
+    }
+    return false;
+  }
+
+  setSliding(currentIndex, slideTo) {
+    this.setState({
+      in: false,
+      sliding: true,
+      currentIndex,
+      slideTo
+    })
+  }
+
   next() {
     if (this.state.currentIndex >= this.state.slideMap.size - 1) {
+      if (this.isInfinite("left")) {
+        return;
+      }
       if (this.state.currentIndex !== this.state.slideMap.size - 1) {
         this.setState({
           currentIndex: this.state.slides.length - 1,
@@ -96,13 +132,7 @@ class Wheel extends Component {
     const slideMap = this.state.slideMap;
     const index = this.state.currentIndex + 1;
     const last = slideMap.size - 1;
-
-    this.setState({
-      in: false,
-      sliding: true,
-      currentIndex: index,
-      slideTo: "left",
-    });
+    this.setSliding(index, "left");
 
     switch (index) {
       case last:
@@ -115,6 +145,9 @@ class Wheel extends Component {
 
   previous() {
     if (this.state.currentIndex <= 0) {
+      if (this.isInfinite("right")) {
+        return;
+      }
       if (this.state.currentIndex !== 0) {
         this.setState({
           currentIndex: 0,
@@ -125,13 +158,7 @@ class Wheel extends Component {
 
     const slideMap = this.state.slideMap;
     const index = this.state.currentIndex - 1;
-
-    this.setState({
-      in: false,
-      sliding: true,
-      currentIndex: index,
-      slideTo: "right",
-    });
+    this.setSliding(index, "right");
 
     switch (index) {
       case 0:
@@ -204,6 +231,7 @@ Wheel.propTypes = {
   leaveDuration: PropTypes.number,
   enterDuration: PropTypes.number,
   startSlide: PropTypes.number,
+  infinite: PropTypes.bool
 };
 
 export default withStyles(styles)(Wheel);

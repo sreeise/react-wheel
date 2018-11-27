@@ -34,7 +34,10 @@ const urls = [
 const IndexPage = () => (
   <div>
     <ContainerDark>
-      <Wheel theme={"dark"} slidesShowing={4} spacing={40}>
+      <Wheel theme={"dark"}
+             infinite={true}
+             slidesShowing={4}
+             spacing={40}>
         {urls.map((url, index) => {
           return (
             <a key={index} href={url}>

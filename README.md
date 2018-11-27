@@ -43,6 +43,9 @@ Then go to:
     // Amount of children to show in each slide
     slidesShowing={2}
     
+    // Slides rotate infinitely - defaults to false
+    infinite={true}
+    
     // Duration of slide leaving and entering in milliseconds
     enterDuration={800} 
     leaveDuration={400}

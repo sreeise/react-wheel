@@ -4,6 +4,7 @@ import LeftArrow from "../arrows/LeftArrow";
 import RightArrow from "../arrows/RightArrow";
 import * as PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import Mapper from "./Mapper";
 
 const styles = theme => ({
   grid: {
@@ -11,6 +12,7 @@ const styles = theme => ({
     alignItems: "center",
     textAlign: "center",
     justify: "center",
+    margin: theme.spacing * 2
   },
   container: {
     margin: theme.spacing * 2,
@@ -21,6 +23,23 @@ const styles = theme => ({
 class GridContainer extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      spacing: 0,
+      arrows: true,
+      arrowColor: "",
+      theme: "light",
+    };
+  }
+
+  componentDidMount() {
+    const props = Object.assign({}, this.props);
+    this.setState({
+      spacing: props.spacing || 0,
+      arrows: props.arrows !== false,
+      theme: props.theme,
+      arrowColor: props.arrowColor === undefined ? "none" : props.arrowColor,
+    });
   }
 
   componentDidCatch(error, errorInfo) {
@@ -39,17 +58,25 @@ class GridContainer extends React.Component {
               className={classes.grid}>
 
           <Grid item xs={1} sm={1}>
-            <LeftArrow arrows={this.props.arrows} theme={this.props.theme} onClick={this.props.previous}/>
+            <LeftArrow arrows={this.state.arrows}
+                       theme={this.props.theme}
+                       onMouseOver={this.props.hoverArrowLeft}
+                       arrowColor={this.props.arrowColor}
+                       onClick={this.props.previous}/>
           </Grid>
 
           <Grid item sm xs>
-            <div className={classes.grid}>
+            <Mapper className={classes.grid}>
               {this.props.children}
-            </div>
+            </Mapper>
           </Grid>
 
           <Grid item xs={1} sm={1}>
-            <RightArrow arrows={this.props.arrows} theme={this.props.theme} onClick={this.props.next}/>
+            <RightArrow arrows={this.props.arrows !== false}
+                        theme={this.props.theme}
+                        arrowColor={this.props.arrowColor}
+                        onMouseOver={this.props.hoverArrowRight}
+                        onClick={this.props.next}/>
           </Grid>
         </Grid>
       </div>

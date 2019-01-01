@@ -1,11 +1,11 @@
 {
   "name": "react-wheel",
-  "description": "react-carousel",
-  "version": "0.0.1",
+  "description": "react carousel component",
+  "version": "0.1.0",
   "dependencies": {
-    "@bit/sreeise.workspace.jsarraylist.arraylist": "0.0.12",
     "@material-ui/core": "^3.3.2",
     "@material-ui/icons": "^3.0.1",
+    "core-js": "^2.6.1",
     "gatsby": "^2.0.19",
     "gatsby-image": "^2.0.15",
     "gatsby-plugin-manifest": "^2.0.5",
@@ -27,7 +27,7 @@
     "react-swipeable": "^4.3.0",
     "react-transition-group": "^2.5.0",
     "serve": "^10.0.2",
-    "styled-components": "^4.0.2"
+    "styled-components": "^4.1.3"
   },
   "keywords": [
     "gatsby"

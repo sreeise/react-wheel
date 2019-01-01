@@ -21,6 +21,7 @@ First clone react-wheel
     
 Go into the development directory
 
+    // There will be another directory named react-wheel under src
     $ cd src/react-wheel
     
 Use npm to run the example

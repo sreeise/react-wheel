@@ -20,24 +20,21 @@ const ContainerLight = styled.div`
 
 // Test urls for images
 const urls = [
-  "https://github.com",
+  "https://google.com",
   "https://netflix.com",
   "https://bitbucket.com",
   "https;//gitlab.com",
   "https://mozilla.org",
   "https://youtube.com",
-  "https://blog.mozilla.org",
-  "https://amazon.com",
+  "https://mozilla.org",
+  "https://youtube.com",
 ];
 
 // Show Wheel carousels with available props
 const IndexPage = () => (
   <div>
     <ContainerDark>
-      <Wheel theme={"dark"}
-             infinite={true}
-             slidesShowing={4}
-             spacing={40}>
+      <Wheel theme={"dark"} infinite={true} slidesShowing={4} spacing={40}>
         {urls.map((url, index) => {
           return (
             <a key={index} href={url}>

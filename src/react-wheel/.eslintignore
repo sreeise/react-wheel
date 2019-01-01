@@ -1,5 +1,5 @@
 # Jetbrains
-.idea
+../../../.idea
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -40,7 +40,7 @@ fabric.properties
 .idea/httpRequests
 
 # Webpack
-webpack.*
+public/webpack.stats.json
 
 # Build
 /build/

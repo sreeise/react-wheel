@@ -1,14 +1,14 @@
 # react-wheel
 React carousel implementation
 
-react-wheel is a individual component on Bit that can be integrated into any application.
-Gatsby is used for development.
+react-wheel is a individual react carousel component. Gatsby is used for development.
 
-Still very much a work in progress. You can see a recent picture in the main directory:
+There is currently not a way to install as a package, but
+feel free to use the source code. The License is MIT. See LICENSE
+
+You can see a recent picture in the main directory:
 
         react-wheel.png
-
-Future Changes: See enhancements/bugs in issues.
 
 ### Running the sample page
 The sample page at:
